@@ -13,6 +13,7 @@ def Pendu1(w):
     file = open("mots.txt")
     L = []
     F = []
+    All = []
     win = 2
     loose = 0
 
@@ -24,24 +25,25 @@ def Pendu1(w):
     print(''.join(guess))
     
     while win < len(L[w]) and loose < 8:
-        l = input("Veuillez saisisr une lettre svp: ")
-        
+        l = input("Veuillez saisisir une lettre svp: ")
+
+        if l in All:
+            l = input("Veuillez saisir une lettre que vous n'avez pas déjà utilisé svp: ")
+        else:
+            All.append(l)
+
         if l not in L[w]:
             F.append(l)
             loose += 1
             print('Il vous reste', 8-loose,'tentatives. Vous avez déjà essayé les lettres: ', F)
             
-
         for i in range(len(L[w])):
             if l == L[w][i]:
                 guess[i] = L[w][i]
                 win += 1
 
-        
-
         print(''.join(guess))
         
-
     if win == len(L[w]):
         print('Bravo vous avez deviné le mot')
     else:
