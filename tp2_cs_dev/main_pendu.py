@@ -1,7 +1,7 @@
 ### Objectifs: créer une première version du jeu de pendu ###
 ### Date de réalitsation: 30/11/2020 ###
 ### Créateur: Deschamps Corto ###
-### À faire: tout ###
+### À faire: version plus avancé du pendu ###
 
 ## Importation des modules/fonctions ##
 import random

@@ -1,7 +1,7 @@
 ### Objectifs: créer les fonctions utiles pour le jeu de pendu ###
 ### Date de réalitsation: 30/11/2020 ###
 ### Créateur: Deschamps Corto ###
-### À faire: tout ###
+### À faire: version plus avancé du pendu ###
 
 ## Def des fonctions ##
 def Pendu1(w):
