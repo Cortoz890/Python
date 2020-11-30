@@ -13,7 +13,6 @@ def Pendu1(w):
     file = open("mots.txt")
     L = []
     F = []
-    All = []
     win = 2
     loose = 0
 
@@ -26,11 +25,6 @@ def Pendu1(w):
     
     while win < len(L[w]) and loose < 8:
         l = input("Veuillez saisisir une lettre svp: ")
-
-        if l in All:
-            l = input("Veuillez saisir une lettre que vous n'avez pas déjà utilisé svp: ")
-        else:
-            All.append(l)
 
         if l not in L[w]:
             F.append(l)
