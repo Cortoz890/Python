@@ -8,9 +8,14 @@ import random
 import f_pendu
 
 ## Variables globales ##
-word = random.randint(0, 193)
+ran = 193
+file = open("mots.txt")
+win = 2
 
 ## Programme principal ##
-f_pendu.Pendu(word)
+txt = f_pendu.Find_word(file)
+hide = f_pendu.Word_to_guess(txt, ran)
 
-        
+f_pendu.Game(hide[0], hide[1], txt, ran)
+result = f_pendu.Game(hide[0], hide[1], txt, ran)
+f_pendu.win_defeat(txt, ran, result)

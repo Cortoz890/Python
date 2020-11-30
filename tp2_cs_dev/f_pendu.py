@@ -7,34 +7,41 @@
 import random
 
 ## Def des fonctions ##
-def Pendu(w):
-# Fonction prenant en parramétre un nombre aléatoire correspondant à un mot dans le fichier
-# 'mots.txt'. Une fois le mot sélectionné la fonction demande à l'utilisateur une lettre 
-# jusqu'à ce que l'utilisateur trouve le mot ou se trompe 8 fois.
-# On a donc en sorti un message de victoire ou de défaite.
-    
-    file = open("mots.txt")
+def Find_word(f):
+# Fonction prenant en parramétre un fichier contenant les mots pour jouer au pendu  
+# Retourne une liste contenant tous les mots danns le fichier f      
     L = []
+    for i in f:
+        L.append(i)
+    f.close()
+
+    return L
+    
+
+def Word_to_guess(L, r):
+# Fonction prenant en paramétre une liste de mots et un nombre aléatoire correspondant au mot à
+# deviner
+# Retourne une liste contenant la première lettre du mot à deviner et des - pour les autres
+    w  = 2
+    guess = list(L[r][0] + (len(L[r]) - 2) * "-")
+
+    for i in range(len(L[r])):
+        if L[r][i] == L[r][0].lower():
+            guess[i] = guess[0].lower()
+            w += 1
+
+    return guess, w
+    
+    
+def Game(guess, w, L, r): 
+  
     F = []
     All = []
-    win = 2
     loose = 0
-
-    for i in file:
-        L.append(i)
-    file.close()
-
-    guess = list(L[w][0] + (len(L[w]) - 2) * "-")
-
-
-    for i in range(len(L[w])):
-        if L[w][i] == L[w][0].lower():
-            guess[i] = guess[0].lower()
-            win += 1
 
     print(''.join(guess))
     
-    while win < len(L[w]) and loose < 8:
+    while w < len(L[r]) and loose < 8:
         l = input("Veuillez saisisir une lettre svp: ")
 
         if l in All:
@@ -43,35 +50,38 @@ def Pendu(w):
         else:
             All.append(l)
 
-        if l not in L[w]:
+        if l not in L[r]:
             F.append(l)
             loose += 1
             print('Il vous reste', 8-loose,'tentatives. Vous avez déjà essayé les lettres: ', F)
             
-        for i in range(len(L[w])):
-            if l == L[w][i]:
-                guess[i] = L[w][i]
-                win += 1
+        for i in range(len(L[r])):
+            if l == L[r][i]:
+                guess[i] = L[r][i]
+                w += 1
 
         print(''.join(guess))
-        
-    if win == len(L[w]):
+    print(w, len(L[r]))
+    return w
+
+def win_defeat(L, r, w):    
+    if w == len(L[r]):
         print('Bravo vous avez deviné le mot')
     else:
-        print('Oh niiion vous avez perdu, le mot était: ', L[w])
+        print('Oh niiion vous avez perdu, le mot était: ', L[r])
 
 
-    re = input('Voulez vous rejouez? Répondez par oui ou non: ')
+    #re = input('Voulez vous rejouez? Répondez par oui ou non: ')
 
-    if re == 'oui':
-        Pendu(random.randint(0, 193))
+    #if re == 'oui':
+    #    Game(random.randint(0, 193))
         
-    else:
-        print('Revenez vie jouer =)')
+    #else:
+    #    print('Revenez vite jouer =)')
 
 
-    return loose
+
 
 def Score():
-    score = Pendu(w)
+    score = Pendu(r)
 
