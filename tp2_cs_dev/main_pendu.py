@@ -10,7 +10,7 @@ import f_pendu
 ## Variables globales ##
 word = random.randint(0, 193)
 
-## Programme principal #
+## Programme principal ##
 f_pendu.Pendu(word)
 
         

@@ -1,7 +1,7 @@
 ### Objectifs: créer les fonctions utiles pour le jeu de pendu ###
 ### Date de réalitsation: 30/11/2020 ###
 ### Créateur: Deschamps Corto ###
-### À faire: version plus avancé du pendu ###
+### À faire: score ###
 
 ## Importation des modules ##
 import random
