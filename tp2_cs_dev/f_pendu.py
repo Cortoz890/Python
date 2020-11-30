@@ -1,7 +1,7 @@
 ### Objectifs: créer les fonctions utiles pour le jeu de pendu ###
 ### Date de réalitsation: 30/11/2020 ###
 ### Créateur: Deschamps Corto ###
-### À faire: fonction score ###
+### À faire: fonction score/ relancer une partie en lançant le fichier main depuis le fichier f_pendu ###
 
 ## Importation des modules ##
 import random
@@ -53,7 +53,10 @@ def Game(guess, w, L, r):
         if l not in L[r]:
             F.append(l)
             loose += 1
-            print('Il vous reste', 8-loose,'tentatives. Vous avez déjà essayé les lettres: ', F)
+            if loose == 8:
+                print("Vous n'avez plus de tentatives.")
+            else:
+                print('Il vous reste', 8-loose,'tentatives. Vous avez déjà essayé les lettres: ', F)
             
         for i in range(len(L[r])):
             if l == L[r][i]:
@@ -64,20 +67,13 @@ def Game(guess, w, L, r):
     
     return w
 
-def win_defeat(L, r, w):    
+def win_defeat(guess, w, L, r):    
     if w == len(L[r]):
         print('Bravo vous avez deviné le mot')
     else:
         print('Oh niiion vous avez perdu, le mot était: ', L[r])
 
-
-    #re = input('Voulez vous rejouez? Répondez par oui ou non: ')
-
-    #if re == 'oui':
-    #    Game(random.randint(0, 193))
-        
-    #else:
-    #    print('Revenez vite jouer =)')
+    print('Voulez vous rejouez? Si oui veuillez relancez le programme main_pendu. ')
 
 
 
