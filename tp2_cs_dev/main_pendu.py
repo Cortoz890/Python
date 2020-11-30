@@ -8,9 +8,9 @@ import random
 import f_pendu
 
 ## Variables globales ##
-word = random.randint(0, 158)
+word = random.randint(0, 193)
 
-## Programme principal ##
-f_pendu.Pendu1(word)
+## Programme principal #
+f_pendu.Pendu(word)
 
         
