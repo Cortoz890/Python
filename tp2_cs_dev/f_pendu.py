@@ -1,7 +1,7 @@
 ### Objectifs: créer les fonctions utiles pour le jeu de pendu ###
 ### Date de réalitsation: 30/11/2020 ###
 ### Créateur: Deschamps Corto ###
-### À faire: Débeuger fonction Game ###
+### À faire: fonction score ###
 
 ## Importation des modules ##
 import random
@@ -61,7 +61,7 @@ def Game(guess, w, L, r):
                 w += 1
 
         print(''.join(guess))
-    print(w, len(L[r]))
+    
     return w
 
 def win_defeat(L, r, w):    
