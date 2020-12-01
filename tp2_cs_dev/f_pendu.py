@@ -1,7 +1,7 @@
 ### Objectifs: créer les fonctions utiles pour le jeu de pendu ###
 ### Date de réalitsation: 30/11/2020 ###
 ### Créateur: Deschamps Corto ###
-### À faire: fonction score/ relancer une partie en lançant le fichier main depuis le fichier f_pendu ###
+### À faire: garder en mémoire les scores/gérer les caracs spétiaux/sécurité pour rentrer une seule lettre à la fois/commenter  ###
 
 ## Importation des modules ##
 import random
@@ -36,7 +36,8 @@ def Word_to_guess(L, r):
 def Game(guess, w, L, r): 
   
     F = []
-    All = []
+    All = [L[r][0].lower()]
+    p = 0
     loose = 0
 
     print(''.join(guess))
@@ -62,22 +63,34 @@ def Game(guess, w, L, r):
             if l == L[r][i]:
                 guess[i] = L[r][i]
                 w += 1
+                p += 1
 
         print(''.join(guess))
     
-    return w
+    return w, loose, p
 
-def win_defeat(guess, w, L, r):    
+
+def win_defeat(guess, w, L, r): 
+    
     if w == len(L[r]):
-        print('Bravo vous avez deviné le mot')
+        print('Bravo vous avez deviné le mot!')
     else:
-        print('Oh niiion vous avez perdu, le mot était: ', L[r])
-
-    print('Voulez vous rejouez? Si oui veuillez relancez le programme main_pendu. ')
+        print('Oh niiion vous avez perdu, le mot était:', L[r])
 
 
-
-
-def Score():
-    score = Pendu(r)
+def Score(loose, p):
+    print(p)
+    print(loose)
+    if p == 0:
+        s = 0
+    else:
+        s = 100*p - 10*loose
+    print('Votre score est:', s)
+    
+    re = input('Voulez vous rejouer? Veuillez réponder par oui ou non: ')
+    if re.lower() == 'oui':
+        exec(open('./main_pendu.py').read())
+    else:
+        print('Revenez vite jouer =)')
+    
 
