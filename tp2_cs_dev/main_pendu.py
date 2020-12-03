@@ -3,6 +3,7 @@
 ### Créateur: Deschamps Corto ###
 ### À faire: version plus avancé du pendu ###
 
+
 ## Importation des modules/fonctions ##
 import random
 import f_pendu
@@ -19,6 +20,6 @@ hide = f_pendu.Word_to_guess(txt, ran)
 
 
 result = f_pendu.Game(hide[0], hide[1], txt, ran)
-f_pendu.win_defeat(hide, result[0], txt, ran)
+f_pendu.win_defeat(result[0], txt, ran)
 
 f_pendu.Score(result[1], result[2])
