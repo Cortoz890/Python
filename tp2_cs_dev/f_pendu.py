@@ -1,7 +1,11 @@
 ### Objectifs: créer les fonctions utiles pour le jeu de pendu ###
 ### Date de réalitsation: 30/11/2020 ###
 ### Créateur: Deschamps Corto ###
-### À faire: garder en mémoire les scores/gérer les caracs spétiaux/sécurité pour rentrer une seule lettre à la fois ###
+### À faire: garder en mémoire les scores ###
+
+
+## Importation des modules ##
+
 
 
 ## Def des fonctions utiles au jeu ##
@@ -51,6 +55,7 @@ def Game(guess, w, L, r):
     
     F = []                      # Liste contenant les lettres déjà utilisés fausses
     All = [L[r][0].lower()]     # Liste contenant toutes les lettres déjà utilisés
+    Allowed_caracs = list('aàâbcçdeéèêfghiïjklmnoôpqrstuùûüvwxyz')
     p = 0
     loose = 0
 
@@ -59,8 +64,13 @@ def Game(guess, w, L, r):
     while w < len(L[r]) and loose < 8:
         l = input("Veuillez saisisir une lettre svp: ")
 
-        while l in All:
-            l = input('Vous avez déjà utilisé cette lettre veuillez en choisisr une autre: ')
+        while l in All or len(l) != 1 or l not in Allowed_caracs:   # Sécurité de saisie
+            if len(l) != 1:
+                l = input('Veuillez entrez une seule lettre à la fois svp: ')
+            elif l not in Allowed_caracs:
+                l = input('Veuillez saisir un caractère valide svp: ')
+            else:
+                l = input('Vous avez déjà utilisé cette lettre veuillez en choisisr une autre: ')
         
         All.append(l)
 
@@ -104,8 +114,6 @@ def Score(loose, p):
     # L'utilisateur obtient 100 points par lettre deviné et en perd 10 par erreur si il ne 
     # partvient à deviner aucunes lettres il obtiend alors un score de 0
 
-    print(p)
-    print(loose)
     if p == 0:
         s = 0
     else:
@@ -119,4 +127,7 @@ def Score(loose, p):
         print('Revenez vite jouer =)')
     
 
-
+## Def des fonctions graphiques ##
+def C_window():
+    Window = Tk()
+    Window.title('Jeu du pendu')
