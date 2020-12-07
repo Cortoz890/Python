@@ -5,7 +5,7 @@
 
 
 ## Importation des modules ##
-from tkinter import Tk, Label, Button, Entry, Canvas, DISABLED, NORMAL, END
+from tkinter import Tk, Label, Button, Entry, Canvas, DISABLED, NORMAL, END, PhotoImage
 
 
 ## Variables globales ##
@@ -139,7 +139,7 @@ def C_window(guess, L, r):
     global Label_hide, Label_help, Label_end, letter, Button_try
     
     Window = Tk()
-    Window.geometry('900x300')
+    Window.geometry('900x500')
     Window.title('Jeu du pendu')
 
     Label_hide = Label(Window, text = ''.join(guess), fg = 'black')
@@ -154,9 +154,13 @@ def C_window(guess, L, r):
     letter = Entry(Window, textvariable = str)
     letter.grid(row = 1, column = 1)
 
-    Picture = Canvas(Window, width = 200, height = 200,  bg ='white')
-    Picture.grid(row = 0, column = 4)
+    Picture = PhotoImage(file = 'bonhomme1.gif')
 
+    Canevas = Canvas(Window, width = 280, height = 280,  bg ='white')
+    Canevas.grid(row = 0, column = 4)
+    item = Canevas.create_image(140, 140, anchor = 'center', image = Picture)
+    #item.pack()
+    
     Button_try = Button(Window, text = 'Proposer', command = lambda:[Game(guess, L, r), win_defeat(L, r)], state = NORMAL)
     Button_try.grid(row = 1, column = 2)
 

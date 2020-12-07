@@ -6,6 +6,7 @@
 
 
 ## Importation des modules/fonctions ##
+
 import random
 import f_pendu
 
@@ -14,7 +15,6 @@ import f_pendu
 file = open("mots.txt")
 
 ran = random.randint(0, 193)
-
 
 ## Programme principal ##
 txt = f_pendu.Find_word(file)
