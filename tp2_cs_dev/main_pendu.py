@@ -1,7 +1,7 @@
-### Objectifs: créer une première version du jeu de pendu ###
+### Objectifs: Créer une dernière version du jeu de pendu avec interface graphique###
 ### Date de réalitsation: 30/11/2020 ###
 ### Créateur: Deschamps Corto ###
-### À faire: version plus avancé du pendu ###
+### À faire: finir l'interface graphique ###
 
 
 ## Importation des modules/fonctions ##
@@ -13,15 +13,17 @@ import f_pendu
 file = open("mots.txt")
 
 ran = random.randint(0, 193)
-win = 2
+
 
 ## Programme principal ##
 txt = f_pendu.Find_word(file)
 hide = f_pendu.Word_to_guess(txt, ran)
 
-result = f_pendu.Game(hide[0], hide[1], txt, ran)
-f_pendu.win_defeat(result[0], txt, ran)
 
-f_pendu.Score(result[1], result[2])
+f_pendu.C_window(hide, txt, ran)
 
-#f_pendu.C_window()
+
+#result = f_pendu.Game(hide[0], hide[1], txt, ran)
+#f_pendu.win_defeat(result[0], txt, ran)
+
+#f_pendu.Score(result[1], result[2])
