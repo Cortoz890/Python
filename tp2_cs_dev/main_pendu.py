@@ -13,9 +13,12 @@ import f_pendu
 
 ## Variables globales ##
 file = open("mots.txt")
+
 ran = random.randint(0, 193)
+
 F = []       # Liste contenant les lettres déjà utilisés fausses
-All = []
+All = []     # Liste contenat toutes les lettres utilisés
+
 
 ## Programme principal ##
 txt = f_pendu.Find_word(file)
