@@ -18,14 +18,14 @@ ran = random.randint(0, 193)
 
 F = []       # Liste contenant les lettres déjà utilisés fausses
 All = []     # Liste contenat toutes les lettres utilisés
-
+Scores = []
 
 ## Programme principal ##
 txt = f_pendu.Find_word(file)
 hide = f_pendu.Word_to_guess(txt, ran, All)
 
 
-f_pendu.C_window(hide[0], txt, ran, hide[1], F)
+f_pendu.C_window(hide[0], txt, ran, hide[1], F, Scores)
 
 
 #result = f_pendu.Game(hide[0], hide[1], txt, ran)

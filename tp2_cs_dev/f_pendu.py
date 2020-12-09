@@ -1,7 +1,7 @@
 ### Objectifs: créer les fonctions utiles pour le jeu de pendu ###
 ### Date de réalitsation: 30/11/2020 ###
 ### Créateur: Deschamps Corto ###
-### À faire: faire fonctionner fonction reload/retenue des score ###
+### À faire: rendre l'affichage des scores beau ###
 
 
 ## Importation des modules ##
@@ -106,11 +106,12 @@ def Security(guess, L, r, al, f):
         Game(guess, L, r, let, f)
 
 
-def Reload(L):
+def Reload(L, scores):
     # Fonction servant à relancer la partie une fois qu'oon appuie sur le boutton rejouer
+    global Loose, w, p
 
     Loose = 0
-    w = 0
+    w = 2
     p = 0
     r = random.randint(0, 193)
 
@@ -120,19 +121,20 @@ def Reload(L):
     item = Canevas.create_image(140, 140, anchor = 'center', image = Pictures[7])
 
     Label_end.configure(text = '')
-    Lable_score_message.configure(text = '')
+    Label_score_message.configure(text = '')
+    Label_scores.configure(text = '')
 
-    guess = Word_to_guess(L, r, al)
+    guess = Word_to_guess(L, r, al)[0]
 
-    Label_hide.configure(''.join(guess))
+    Label_hide.configure(text = ''.join(guess))
 
     Button_try['text'] = 'Proposer'
-    Button_try['command']  =  lambda:[Security(guess, L, r, al, f), Win_defeat(L, r), Score(L,r)]
+    Button_try['command']  =  lambda:[Security(guess, L, r, al, f), Win_defeat(L, r, scores), Score(L,r,scores)]
 
-    print(p)
+    print(guess)
 
 
-def Win_defeat(L, r): 
+def Win_defeat(L, r, scores): 
     # Fonction permettant au joueur de savoir si il a gagnè ou perdu sur sa dernière tentative
     # Pour cela elle vérifie si la condition de victoire (w = len[L[r]]) est bien atteinte
     # Elle prend donc logiquement en paramètre la condition de victoire, la lise de mot et le
@@ -145,14 +147,14 @@ def Win_defeat(L, r):
     if w == len(L[r]):
         Label_end.configure(text = 'Bravo vous avez deviné le mot!')   
         Button_try['text'] = 'Rejouer'
-        Button_try['command']  = ''
+        Button_try['command']  = lambda:[Reload(L, scores)]
     elif w != len(L[r]) and Loose == 8:
         Label_end.configure(text = ''.join(loose_txt))
         Button_try['text'] = 'Rejouer'
-        Button_try['command']  =  lambda:[Reload(L)]
+        Button_try['command']  =  lambda:[Reload(L, scores)]
 
 
-def Score(L, r):
+def Score(L, r, scores):
     # Cette fonction gère les scores du joueur
     # Elle prend en paramètre loose qui compte le nombre d'erreur faites par l'utilisateur et 
     # p qui compte le nombre de lettres révélés par l'utilisateur.
@@ -165,16 +167,21 @@ def Score(L, r):
             s = 0
         else:
             s = 100*p - 10*Loose
+
+        scores.append(str(s))
+
+        txt_score_message = 'Votre score est de ', str(s),' points'
+        txt_score = 'Vos précédent score sont: ', '/ '.join(scores)
+
         
-        txt_score = 'Votre score est de ', str(s),' points'
-        Lable_score_message.configure(text = ''.join(txt_score))
-    
+        Label_score_message.configure(text = ''.join(txt_score_message))
+        Label_scores.configure(text = ''.join(txt_score))
 
 ## Def des fonctions graphiques ##
-def C_window(guess, L, r, al, f):
+def C_window(guess, L, r, al, f, scores):
     # Fonction créant la fenêtre de jeu pour le pendu
 
-    global Label_hide, Label_help, Label_end, letter, Canevas, Pictures, item, Button_try,  Lable_score_message, Label_score
+    global Label_hide, Label_help, Label_end, letter, Canevas, Pictures, item, Button_try,  Label_score_message, Label_scores
     
     Window = Tk()
     Window.geometry('900x500')
@@ -189,11 +196,11 @@ def C_window(guess, L, r, al, f):
     Label_end = Label(Window, text = '', fg = 'black')
     Label_end.grid(row = 2, column = 1)
 
-    Lable_score_message = Label(Window, text = '', fg = 'black')
-    Lable_score_message.grid(row = 3, column = 1)
+    Label_score_message = Label(Window, text = '', fg = 'black')
+    Label_score_message.grid(row = 3, column = 1)
 
-    Label_score = Label(Window, text = '', fg = 'black')
-    Label_score.grid(row = 4, column = 1)
+    Label_scores = Label(Window, text = '', fg = 'black')
+    Label_scores.grid(row = 4, column = 1)
 
     letter = Entry(Window, textvariable = str)
     letter.grid(row = 1, column = 1)
@@ -205,7 +212,7 @@ def C_window(guess, L, r, al, f):
     item = Canevas.create_image(140, 140, anchor = 'center', image = Pictures[7])
     
     
-    Button_try = Button(Window, text = 'Proposer', command = lambda:[Security(guess, L, r, al, f), Win_defeat(L, r), Score(L,r)])
+    Button_try = Button(Window, text = 'Proposer', command = lambda:[Security(guess, L, r, al, f), Win_defeat(L, r, scores), Score(L,r, scores)])
     Button_try.grid(row = 1, column = 2)
 
     Button_leave = Button(Window, text = 'Quitter', command = Window.destroy)
