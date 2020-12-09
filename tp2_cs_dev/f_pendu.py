@@ -1,7 +1,7 @@
 ### Objectifs: créer les fonctions utiles pour le jeu de pendu ###
 ### Date de réalitsation: 30/11/2020 ###
 ### Créateur: Deschamps Corto ###
-### À faire: mettre l'image/ score/ sécurité de saisie ###
+### À faire: score/enlevé un max de variables globales ###
 
 
 ## Importation des modules ##
@@ -10,7 +10,6 @@ from tkinter import Tk, Label, Button, Entry, Canvas, DISABLED, NORMAL, END, Pho
 
 ## Variables globales ##
 Loose = 0
-F = []        # Liste contenant les lettres déjà utilisés fausses
 w = 2
 
 
@@ -27,7 +26,7 @@ def Find_word(f):
     return L
     
 
-def Word_to_guess(L, r):
+def Word_to_guess(L, r, al):
     # Cette fonction permet de cacher les lettres du mots choisi au hasard sauf la première et
     # révèle d'autres lettres du mot si ce sont les mêmes que la première.
     # Elle prend en paramètre la liste de mot L ainsi que le nombre choisi au hasard dans le
@@ -36,46 +35,43 @@ def Word_to_guess(L, r):
     # On l'initialise à 2 car dans tous les cas on révèle la  première lettre et pour une raison 
     # que j'ignore len(L[r]) vaut 1 de plus que le nombre de lettres qu'elle contient réellement.
        
-    global w
+    global w 
 
     guess = list(L[r][0] + (len(L[r]) - 2) * "-")
+    al.append(L[r][0].lower())
 
     for i in range(len(L[r])):
         if L[r][i] == L[r][0].lower():
             guess[i] = guess[0].lower()
             w += 1
 
-    return guess
+    return guess, al
 
 
 
-def Game(guess, L, r): 
+def Game(guess, L, r, l, f): 
     # Fonction gèrant le jeu grâce à une boucle while, tant qu'on ne respecte pas la condition
     # de victoire (toutes les lettres ont été révélés donc w = len(L[r])) ou de défaite (loose
     # = 8 donc le joueur s'est trompé 8 fois) on continue de demander une lettre au joueur en 
     # enlevant ou non une chance au joueur selon si il s'est trompé ou non. Donc en ajoutant 1
     # ou non à loose.
     # Cettte fonction prend en paramètre la liste contenant le mot lorsqu'il est caché: guess,
-    # une liste L contenant les lettres du mots, w la condition de victoire et r le nombre 
-    # choisit au hasard dans le fichier main.
+    # une liste L contenant les lettres du mots et r le nombre choisit au hasard dans le
+    # fichier main.
     # Elle retourne les conditions de victoire et de défaite ainsi que p qui compe le nombre de
     # lettres révélés par l'utilisateur.
     
-    global Loose, F, w
+    global Loose, w
     
-    All = [L[r][0].lower()]     # Liste contenant toutes les lettres déjà utilisés
-    Allowed_caracs = list('aàâbcçdeéèêfghiïjklmnoôpqrstuùûüvwxyz')
     p = 0
     
-    l = letter.get()
-        
-    All.append(l)
+    letter.delete(0, END)
 
     if l not in L[r]:
-        F.append(l)
+        f.append(l)
         Loose += 1
-        end_txt = ['Il vous reste ', str(8-Loose),' tentatives. Vous avez déjà essayé les lettres: ', str(F)]
-        letter.delete(0, END)
+        item = Canevas.create_image(140, 140, anchor = 'center', image = Pictures[Loose - 1])
+        end_txt = ['Vous avez déjà essayé les lettres: ', ', '.join(f)]
         if Loose == 8:
             Label_end.configure(text = "Vous n'avez plus de tentatives.")
         else:
@@ -84,7 +80,6 @@ def Game(guess, L, r):
     for i in range(len(L[r])):
         if l == L[r][i]:
             guess[i] = L[r][i]
-            letter.delete(0, END)
             w += 1
             p += 1
     
@@ -94,6 +89,27 @@ def Game(guess, L, r):
     return w, p, Loose
 
 
+def Security(guess, L, r, al, f):
+    # Fonction vérifiant si ce que rentre l'utilisateur est bien une lettre qu'il n'a pas déjà
+    # saisi et exécute la fonction de jeu si la lettre est valide.
+    # Prent en paramètre la liste contenant le mot caché guess, la liste de tous les mots du 
+    # fichier texte L, le nombre choisi au hasard r et al, la liste contenant toutes les lettres
+    # déjà saisi par l'utilisateur.  
+
+    Allowed_caracs = list('aàâbcçdeéèêfghiïjklmnoôpqrstuùûüvwxyz')
+    let = letter.get()
+    letter.delete(0, END)
+    
+    Label_help.configure(text = 'Veuillez saisir une letre svp: ')
+    if len(let) != 1:
+        Label_help.configure(text = 'Veuillez saisir une lettre à la fois: ')
+    elif let not in Allowed_caracs:
+        Label_help.configure(text = 'Veuillez saisir un caractère valide: ')
+    elif let in al:
+        Label_help.configure(text = "Veuillez saisir une lettre que vous n'avez pas déjà utilisé: ")
+    else:
+        al.append(let)
+        Game(guess, L, r, let, f)
 
 
 def win_defeat(L, r): 
@@ -131,12 +147,13 @@ def Score(loose, p):
         s = 100*p - 10*loose
     print('Votre score est:', s)
     
+    return s
 
 ## Def des fonctions graphiques ##
-def C_window(guess, L, r):
+def C_window(guess, L, r, al, f):
     # Fonction créant la fenêtre de jeu pour le pendu
-    
-    global Label_hide, Label_help, Label_end, letter, Button_try
+
+    global Label_hide, Label_help, Label_end, letter, Canevas, Pictures, item, Button_try
     
     Window = Tk()
     Window.geometry('900x500')
@@ -154,14 +171,14 @@ def C_window(guess, L, r):
     letter = Entry(Window, textvariable = str)
     letter.grid(row = 1, column = 1)
 
-    Picture = PhotoImage(file = 'bonhomme1.gif')
+    Pictures = [PhotoImage(file = 'bonhomme1.gif'), PhotoImage(file = 'bonhomme2.gif'), PhotoImage(file = 'bonhomme3.gif'), PhotoImage(file = 'bonhomme4.gif'), PhotoImage(file = 'bonhomme5.gif'), PhotoImage(file = 'bonhomme6.gif'), PhotoImage(file = 'bonhomme7.gif'), PhotoImage(file = 'bonhomme8.gif')]
 
     Canevas = Canvas(Window, width = 280, height = 280,  bg ='white')
     Canevas.grid(row = 0, column = 4)
-    item = Canevas.create_image(140, 140, anchor = 'center', image = Picture)
-    #item.pack()
+    item = Canevas.create_image(140, 140, anchor = 'center', image = '')
     
-    Button_try = Button(Window, text = 'Proposer', command = lambda:[Game(guess, L, r), win_defeat(L, r)], state = NORMAL)
+    
+    Button_try = Button(Window, text = 'Proposer', command = lambda:[Security(guess, L, r, al, f), win_defeat(L, r)])
     Button_try.grid(row = 1, column = 2)
 
     Button_leave = Button(Window, text = 'Quitter', command = Window.destroy)

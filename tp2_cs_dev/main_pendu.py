@@ -13,15 +13,16 @@ import f_pendu
 
 ## Variables globales ##
 file = open("mots.txt")
-
 ran = random.randint(0, 193)
+F = []       # Liste contenant les lettres déjà utilisés fausses
+All = []
 
 ## Programme principal ##
 txt = f_pendu.Find_word(file)
-hide = f_pendu.Word_to_guess(txt, ran)
+hide = f_pendu.Word_to_guess(txt, ran, All)
 
 
-f_pendu.C_window(hide, txt, ran)
+f_pendu.C_window(hide[0], txt, ran, hide[1], F)
 
 
 #result = f_pendu.Game(hide[0], hide[1], txt, ran)
