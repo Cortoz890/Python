@@ -18,7 +18,7 @@ ran = random.randint(0, 193)
 
 F = []       # Liste contenant les lettres déjà utilisés fausses
 All = []     # Liste contenat toutes les lettres utilisés
-Scores = []
+Scores = []  # Liste contenant les scores des différentes partie, ce réinitialise à chaque fois qu'on ferme la fenêtre
 
 ## Programme principal ##
 txt = f_pendu.Find_word(file)

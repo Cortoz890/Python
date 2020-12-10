@@ -1,7 +1,7 @@
 ### Objectifs: créer les fonctions utiles pour le jeu de pendu ###
 ### Date de réalitsation: 30/11/2020 ###
 ### Créateur: Deschamps Corto ###
-### À faire: rendre l'affichage des scores beau ###
+### À faire: rendre l'affichage des scores beau/changer les commentaires plus d'actualités ###
 
 
 ## Importation des modules ##
@@ -9,10 +9,10 @@ from tkinter import Tk, Label, Button, Entry, Canvas, DISABLED, NORMAL, END, Pho
 import random
 
 ## Variables globales ##
-Loose = 0
-w = 2
-p = 0
-
+Loose = 0   # Compteur de la condition de défaite
+w = 2       # Compteur de la condition de victoire # On initialise à 2 car dans tous les cas on révèle la  première lettre et pour une raison      que j'ignore len(L[r]) vaut 1 de plus que le nombre de lettres qu'elle contient réellement
+p = 0       # Compteur de nombres de lettres révélés
+ 
 ## Def des fonctions utiles au jeu ##
 def Find_word(f):
     # Fonction prenant en parramétre un fichier f contenant les mots pour jouer au pendu. 
@@ -29,11 +29,10 @@ def Find_word(f):
 def Word_to_guess(L, r, al):
     # Cette fonction permet de cacher les lettres du mots choisi au hasard sauf la première et
     # révèle d'autres lettres du mot si ce sont les mêmes que la première.
-    # Elle prend en paramètre la liste de mot L ainsi que le nombre choisi au hasard dans le
-    # fichier main: r et rend  une liste contenant la première lettre du mot et des "-" pour les 
-    # autres lettres ainsi que le nombre de lettres révélés w.
-    # On l'initialise à 2 car dans tous les cas on révèle la  première lettre et pour une raison 
-    # que j'ignore len(L[r]) vaut 1 de plus que le nombre de lettres qu'elle contient réellement.
+    # Elle prend en paramètre la liste de mot L, le nombre choisi au hasard dans le
+    # fichier main: r ainsi que la liste al qui contiendra tous les caractères rentrés par l'utilisateur  
+    # Rend  une liste contenant la première lettre du mot et des "-" pour les autres lettres. 
+    
        
     global w 
 
@@ -49,16 +48,15 @@ def Word_to_guess(L, r, al):
 
 
 def Game(guess, L, r, l, f): 
-    # Fonction gèrant le jeu grâce à une boucle while, tant qu'on ne respecte pas la condition
+    # Fonction gèrant le jeu grâce, tant qu'on ne respecte pas la condition
     # de victoire (toutes les lettres ont été révélés donc w = len(L[r])) ou de défaite (loose
     # = 8 donc le joueur s'est trompé 8 fois) on continue de demander une lettre au joueur en 
     # enlevant ou non une chance au joueur selon si il s'est trompé ou non. Donc en ajoutant 1
     # ou non à loose.
     # Cettte fonction prend en paramètre la liste contenant le mot lorsqu'il est caché: guess,
-    # une liste L contenant les lettres du mots et r le nombre choisit au hasard dans le
-    # fichier main.
-    # Elle retourne les conditions de victoire et de défaite ainsi que p qui compe le nombre de
-    # lettres révélés par l'utilisateur.
+    # une liste L contenant les lettres du mots, r le nombre choisit au hasard dans le
+    # fichier main, l la lettre rentré par l'utilisateur et f la liste contenant les lettres 
+    # fausses rentrés par l'utilisateur.
     
     global Loose, w, p
     
@@ -87,8 +85,9 @@ def Security(guess, L, r, al, f):
     # Fonction vérifiant si ce que rentre l'utilisateur est bien une lettre qu'il n'a pas déjà
     # saisi et exécute la fonction de jeu si la lettre est valide.
     # Prent en paramètre la liste contenant le mot caché guess, la liste de tous les mots du 
-    # fichier texte L, le nombre choisi au hasard r et al, la liste contenant toutes les lettres
-    # déjà saisi par l'utilisateur.  
+    # fichier texte L, le nombre choisi au hasard r ,al la liste contenant toutes les lettres
+    # déjà saisi par l'utilisateurs et f la liste contenant toutes les lettres fausses déjà 
+    # rentrés par l'utilisateur.  
 
     Allowed_caracs = list('aàâbcçdeéèêfghiïjklmnoôpqrstuùûüvwxyz')
     let = letter.get()
@@ -107,7 +106,13 @@ def Security(guess, L, r, al, f):
 
 
 def Reload(L, scores):
-    # Fonction servant à relancer la partie une fois qu'oon appuie sur le boutton rejouer
+    # Fonction servant à relancer la partie une fois qu'on appuie sur le boutton rejouer
+    # Pour cela elle remet les différents éléments de l'interface graphique comme ils étaient 
+    # avant que l'utilisateur commmence sa partie et prend un nouveau mot dans L en prenant
+    # un nouveau nombre aléatoire que l'on place en paramètre de Word_to_guess pour obtenir
+    # la listecontenant le nouveau mot caché.
+    # Le parmètre scores est une liste stockant les scores des différentes parties 
+
     global Loose, w, p
 
     Loose = 0
@@ -130,8 +135,6 @@ def Reload(L, scores):
 
     Button_try['text'] = 'Proposer'
     Button_try['command']  =  lambda:[Security(guess, L, r, al, f), Win_defeat(L, r, scores), Score(L,r,scores)]
-
-    print(guess)
 
 
 def Win_defeat(L, r, scores): 
@@ -171,11 +174,14 @@ def Score(L, r, scores):
         scores.append(str(s))
 
         txt_score_message = 'Votre score est de ', str(s),' points'
-        txt_score = 'Vos précédent score sont: ', '/ '.join(scores)
+        txt_score = 'Vos précédent score sont: ', '/ '.join(scores[:-1])
 
         
         Label_score_message.configure(text = ''.join(txt_score_message))
-        Label_scores.configure(text = ''.join(txt_score))
+        
+        if len(scores) > 1:
+            Label_scores.configure(text = ''.join(txt_score))          
+
 
 ## Def des fonctions graphiques ##
 def C_window(guess, L, r, al, f, scores):
@@ -184,38 +190,45 @@ def C_window(guess, L, r, al, f, scores):
     global Label_hide, Label_help, Label_end, letter, Canevas, Pictures, item, Button_try,  Label_score_message, Label_scores
     
     Window = Tk()
-    Window.geometry('900x500')
+    Window.geometry('2400x500')
     Window.title('Jeu du pendu')
 
     Label_hide = Label(Window, text = ''.join(guess), fg = 'black')
     Label_hide.grid(row = 0, column = 1)
+    Label_hide.configure(font = 30)
 
     Label_help = Label(Window, text = 'Veuillez saisir une lettre svp:', fg = 'blue')
     Label_help.grid(row = 1, column = 0)
+    Label_help.configure(font = 30)
 
     Label_end = Label(Window, text = '', fg = 'black')
     Label_end.grid(row = 2, column = 1)
+    Label_end.configure(font = 30)
 
     Label_score_message = Label(Window, text = '', fg = 'black')
     Label_score_message.grid(row = 3, column = 1)
+    Label_score_message.configure(font = 30)
 
     Label_scores = Label(Window, text = '', fg = 'black')
     Label_scores.grid(row = 4, column = 1)
+    Label_scores.configure(font = 30)
 
     letter = Entry(Window, textvariable = str)
     letter.grid(row = 1, column = 1)
+    letter.configure(font = 10)
 
     Pictures = [PhotoImage(file = 'bonhomme1.gif'), PhotoImage(file = 'bonhomme2.gif'), PhotoImage(file = 'bonhomme3.gif'), PhotoImage(file = 'bonhomme4.gif'), PhotoImage(file = 'bonhomme5.gif'), PhotoImage(file = 'bonhomme6.gif'), PhotoImage(file = 'bonhomme7.gif'), PhotoImage(file = 'bonhomme8.gif')]
 
     Canevas = Canvas(Window, width = 280, height = 280,  bg ='white')
     Canevas.grid(row = 0, column = 4)
     item = Canevas.create_image(140, 140, anchor = 'center', image = Pictures[7])
-    
-    
+       
     Button_try = Button(Window, text = 'Proposer', command = lambda:[Security(guess, L, r, al, f), Win_defeat(L, r, scores), Score(L,r, scores)])
     Button_try.grid(row = 1, column = 2)
+    Button_try.configure(font = 20)
 
     Button_leave = Button(Window, text = 'Quitter', command = Window.destroy)
     Button_leave.grid(row = 1, column = 3)
+    Button_leave.configure(font = 20)
     
     Window.mainloop()   
