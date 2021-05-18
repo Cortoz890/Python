@@ -19,8 +19,8 @@ if pid == 0:
 
 if pid > 0:
     for i in range(6):
-        print("Le père boucle pour la ", i, "éme fois")
         time.sleep(1)
+        print("Le père boucle pour la ", i, "éme fois")
         if i == 3:
             os.kill(pid, signal.SIGKILL)
-            print("signal envoyé")
+            print("Signal envoyé")
